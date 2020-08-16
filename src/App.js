@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
+import { Header } from './components';
+
 function App() {
   const [welcomeMessage, setWelcomeMessage] = useState("");
 
@@ -17,9 +19,8 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <p>{welcomeMessage}</p>
-      </header>
+      <Header />
+      <p>{welcomeMessage}</p>
     </div>
   );
 }
