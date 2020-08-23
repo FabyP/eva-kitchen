@@ -19,7 +19,7 @@ const Header = () => {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
-          Signed in as: <a href="#login">Test User</a>
+          Eingeloggt als: <a href="#login">Test User</a>
         </Navbar.Text>
       </Navbar.Collapse>
     </Navbar>

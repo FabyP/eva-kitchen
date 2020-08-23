@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
-
-import { Header } from './components';
+import { Header, Sidebar } from "./components";
+import { Order, Menu, Table, Categories } from "./screens";
 
 function App() {
-  const [welcomeMessage, setWelcomeMessage] = useState("");
-
-  const fetchMessage = async () => {
-    fetch("http://localhost:9000/users")
-      .then((res) => res.text())
-      .then(response => setWelcomeMessage(response))
-      .catch(error => console.log(error));
-  };
-
-  useEffect(() => {
-    fetchMessage();
-  }, []);
-
   return (
-    <div className="app">
+    <Router>
       <Header />
-      <p>{welcomeMessage}</p>
-    </div>
+      <Sidebar />
+      <div className="content">
+        <Switch>
+          <Route path="/order" component={Order} />
+          <Route path="/table" component={Table} />
+          <Route path="/menu" component={Menu} />
+          <Route path="/categories" component={Categories} />
+          <Redirect from="/" to="/order" />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

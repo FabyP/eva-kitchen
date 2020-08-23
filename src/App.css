@@ -1,4 +1,11 @@
 .App {
   text-align: center;
 }
+body {
+  background-color: #FAFBFC !important;
+}
 
+.content {
+  margin-left: 250px;
+  padding: 16px;
+}

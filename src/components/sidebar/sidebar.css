@@ -1,0 +1,28 @@
+#sidebar {
+  height: 100%;
+  width: 250px;
+  background-color: white;
+  position: fixed;
+  padding-top: 10px;
+  z-index: 1;
+  top: 56;
+  left: 0;
+  overflow-x: hidden;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+
+.sidebar a {
+  color: #42494f;
+  display: block;
+}
+
+.sidebar a:hover, .sidebar a:active{
+  color: #13aa52;
+}
+
+svg {
+  margin-right: 10px;
+}
