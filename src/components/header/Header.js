@@ -5,8 +5,8 @@ import Logo from "../../logo.svg";
 
 const Header = () => {
   return (
-    <Navbar bg="dark" variant="dark">
-      <Navbar.Brand href="#home">
+    <Navbar bg="dark" variant="dark" className="fixed-top">
+      <NavbarBrand href="/order">
         <img
           alt=""
           src={Logo}
@@ -15,7 +15,7 @@ const Header = () => {
           className="d-inline-block align-top"
         />{" "}
         Evas Restaurant
-      </Navbar.Brand>
+      </NavbarBrand>
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
