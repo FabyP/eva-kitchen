@@ -22,7 +22,9 @@ const Order = () => {
   return (
     <div className="container">
       {orders.map((order) => (
-        <p key={order._id}>Tisch: {order.TableId}, Customer: {order.CustomerId}</p>
+        <p key={order._id}>
+          Tisch: {order.TableId}, Customer: {order.CustomerId}
+        </p>
       ))}
     </div>
   );
