@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,14 +14,16 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 
+import http from "../../http-common";
+
 import "./Categories.css";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = async () => {
-    await axios
-      .get("http://localhost:9000/categories")
+    await http
+      .get("/categories")
       .then(function (response) {
         setCategories(response.data);
       })
@@ -40,8 +41,8 @@ const Categories = () => {
   }
 
   function deleteCategory(id) {
-    axios
-      .delete('http://localhost:9000/category/' + id)
+    http
+      .delete('/category/' + id)
       .then(function () {
         fetchCategories();
       })
