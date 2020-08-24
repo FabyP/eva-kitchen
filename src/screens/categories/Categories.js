@@ -14,12 +14,27 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 
+import { DeleteDialog } from "./categories-dialogs";
+
 import http from "../../http-common";
 
 import "./Categories.css";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+
+  function openDeleteDialog(id, name) {
+    setIsOpen(true);
+    setName(name);
+    setId(id);
+  }
+
+  const handleDialogClose = () => {
+    setIsOpen(false);
+  };
 
   const fetchCategories = async () => {
     await http
@@ -40,27 +55,24 @@ const Categories = () => {
     console.log("Category with id=" + id + " was clicked.");
   }
 
-  function deleteCategory(id) {
-    http
-      .delete('/category/' + id)
-      .then(function () {
-        fetchCategories();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   return (
     <div className="container">
       <Paper>
         <Toolbar className="tableToolbar">
-          <Typography className="title" variant="h6" id="tableTitle" component="div">
+          <Typography
+            className="title"
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
             Kategorien
           </Typography>
           <Tooltip title="Kategorie hinzufügen">
-            <IconButton aria-label="Kategorie hinzufügen" className="tableButton">
-              <AddIcon className="tableIcon mx-auto"/>
+            <IconButton
+              aria-label="Kategorie hinzufügen"
+              className="tableButton"
+            >
+              <AddIcon className="tableIcon mx-auto" />
             </IconButton>
           </Tooltip>
         </Toolbar>
@@ -95,7 +107,9 @@ const Categories = () => {
                     </IconButton>
                     <IconButton
                       className="tableButton"
-                      onClick={() => deleteCategory(category._id)}
+                      onClick={() =>
+                        openDeleteDialog(category._id, category.name)
+                      }
                     >
                       <DeleteIcon className="tableIcon mx-auto" />
                     </IconButton>
@@ -106,6 +120,12 @@ const Categories = () => {
           </Table>
         </TableContainer>
       </Paper>
+      <DeleteDialog
+        isOpen={isOpen}
+        handleClose={handleDialogClose}
+        name={name}
+        id={id}
+      />
     </div>
   );
 };
