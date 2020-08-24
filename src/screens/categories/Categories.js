@@ -40,7 +40,14 @@ const Categories = () => {
   }
 
   function deleteCategory(id) {
-    console.log("Category with id=" + id + " was clicked.");
+    axios
+      .delete('http://localhost:9000/category/' + id)
+      .then(function () {
+        fetchCategories();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   return (

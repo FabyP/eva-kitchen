@@ -19,9 +19,9 @@
 }
 
 .tableImage{
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
 }
 
 .tableToolbar{
