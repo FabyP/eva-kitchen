@@ -27,6 +27,7 @@ const Categories = () => {
   const [name, setName] = useState("");
   const [id, setId] = useState("");
 
+
   function openDeleteDialog(id, name) {
     setIsDeleteOpen(true);
     setName(name);
@@ -137,6 +138,9 @@ const Categories = () => {
         id={id}
       />
       <AddDialog isOpen={isAddOpen} handleClose={handleAddDialogClose} />
+      
+
+      
     </div>
   );
 };

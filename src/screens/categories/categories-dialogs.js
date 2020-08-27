@@ -6,9 +6,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-
+import ImageUploader from "react-images-upload";
 import PropTypes from "prop-types";
+
 import http from "../../http-common";
+import "./categories-dialogs.css";
 
 export const DeleteDialog = ({ isOpen, id, name, handleClose }) => {
   function handleConfirm() {
@@ -38,10 +40,10 @@ export const DeleteDialog = ({ isOpen, id, name, handleClose }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleClose} color="secondary" className="secondaryBtn">
           Abbrechen
         </Button>
-        <Button onClick={handleConfirm} color="primary" autoFocus>
+        <Button onClick={handleConfirm} color="primary" className="primaryBtn" autoFocus>
           Löschen
         </Button>
       </DialogActions>
@@ -59,19 +61,30 @@ DeleteDialog.propTypes = {
 export const AddDialog = ({ isOpen, handleClose }) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [picture, setPicture] = useState([]);
+
+  function uploadImage() {
+    console.log(picture);
+  }
+
+  const onDrop = (picture) => {
+    setPicture([...picture, picture]);
+  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    const category = {name: name, image: image}
+    uploadImage();
+
+    const category = { name: name, image: image };
 
     http
-    .post("/category/", category)
-    .then(function () {
-      console.log("added");
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .post("/category/", category)
+      .then(function () {
+        console.log("added");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     handleClose();
   };
@@ -96,7 +109,6 @@ export const AddDialog = ({ isOpen, handleClose }) => {
           onChange={(e) => setName(e.target.value)}
         />
         <TextField
-          autoFocus
           margin="dense"
           id="url"
           label="Bild-Url"
@@ -104,12 +116,22 @@ export const AddDialog = ({ isOpen, handleClose }) => {
           fullWidth
           onChange={(e) => setImage(e.target.value)}
         />
+        <ImageUploader
+          withIcon={true}
+          buttonText="Upload"
+          onChange={onDrop}
+          imgExtension={[".jpg", ".png"]}
+          maxFileSize={5242880}
+          singleImage={true}
+          withPreview={true}
+          buttonStyles={{ backgroundColor: "#13aa52" }}
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleClose} color="primary" className="secondaryBtn">
           Abbrechen
         </Button>
-        <Button onClick={handleSubmit} color="primary" type="submit">
+        <Button onClick={handleSubmit} color="primary" className="primaryBtn" type="submit">
           Erstellen
         </Button>
       </DialogActions>

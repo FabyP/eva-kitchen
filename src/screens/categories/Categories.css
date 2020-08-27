@@ -31,3 +31,7 @@
 .title {
     flex: 1 1 100% !important;
 }
+
+.text-field {
+    color: #13aa52;
+}
