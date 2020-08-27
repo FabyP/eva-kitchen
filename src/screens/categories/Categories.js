@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 
-import { DeleteDialog } from "./categories-dialogs";
+import { DeleteDialog, AddDialog } from "./categories-dialogs";
 
 import http from "../../http-common";
 
@@ -22,18 +22,27 @@ import "./Categories.css";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
 
   function openDeleteDialog(id, name) {
-    setIsOpen(true);
+    setIsDeleteOpen(true);
     setName(name);
     setId(id);
   }
 
-  const handleDialogClose = () => {
-    setIsOpen(false);
+  function openAddDialog() {
+    setIsAddOpen(true);
+  }
+
+  const handleDeleteDialogClose = () => {
+    setIsDeleteOpen(false);
+  };
+
+  const handleAddDialogClose = () => {
+    setIsAddOpen(false);
   };
 
   const fetchCategories = async () => {
@@ -71,6 +80,7 @@ const Categories = () => {
             <IconButton
               aria-label="Kategorie hinzufügen"
               className="tableButton"
+              onClick={openAddDialog}
             >
               <AddIcon className="tableIcon mx-auto" />
             </IconButton>
@@ -121,11 +131,12 @@ const Categories = () => {
         </TableContainer>
       </Paper>
       <DeleteDialog
-        isOpen={isOpen}
-        handleClose={handleDialogClose}
+        isOpen={isDeleteOpen}
+        handleClose={handleDeleteDialogClose}
         name={name}
         id={id}
       />
+      <AddDialog isOpen={isAddOpen} handleClose={handleAddDialogClose} />
     </div>
   );
 };
