@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+var QRCode = require('qrcode.react');
+
 
 const Table = () => {
   const [tables, setTables] = useState([]);
@@ -22,7 +24,7 @@ const Table = () => {
   return (
     <div className="container">
       {tables.map((table) => (
-        <p key={table._id}>{table.TableName}</p>
+        <p key={table._id}>{table.TableName} <QRCode value={table.QRCodeLink} /></p>
       ))}
     </div>
   );
