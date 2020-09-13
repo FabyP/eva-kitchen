@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import socketIOClient from "socket.io-client";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
@@ -16,6 +17,12 @@ const Order = () => {
   };
 
   useEffect(() => {
+    const socket = socketIOClient("http://localhost:9000/");
+    socket.on('event', function(data){
+      if(data.order === "updated"){
+          fetchOrders();
+      }
+    });
     fetchOrders();
   }, []);
 
