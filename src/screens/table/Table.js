@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import http from "../../http-common";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -14,6 +14,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
+import PrintIcon from "@material-ui/icons/Print";
+import ReactToPrint from "react-to-print";
 
 import { DeleteDialog, AddDialog, EditDialog } from "./Tables-dialogs";
 
@@ -28,6 +30,9 @@ const Tables = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
+  const [qrCode, setQrCode] = useState("");
+
+  const componentRef = useRef();
 
   function openAddDialog() {
     setIsAddOpen(true);
@@ -55,6 +60,11 @@ const Tables = () => {
 
   function handleEditDialogClose() {
     setIsEditOpen(false);
+  }
+
+  function setQrAndName(qr, name) {
+    setQrCode(qr);
+    setName(name);
   }
 
   const fetchTables = async () => {
@@ -116,9 +126,7 @@ const Tables = () => {
                   <TableCell align="right">
                     <IconButton
                       className="tableButton"
-                      onClick={() =>
-                        openEditDialog(table._id, table.TableName)
-                      }
+                      onClick={() => openEditDialog(table._id, table.TableName)}
                     >
                       <EditIcon className="tableIcon mx-auto" />
                     </IconButton>
@@ -129,6 +137,19 @@ const Tables = () => {
                       }
                     >
                       <DeleteIcon className="tableIcon mx-auto" />
+                    </IconButton>
+                    <IconButton
+                      className="tableButton"
+                      onClick={() =>
+                        setQrAndName(table.QRCodeLink, table.TableName)
+                      }
+                    >
+                      <ReactToPrint
+                        trigger={() => (
+                          <PrintIcon className="tableIcon mx-auto" />
+                        )}
+                        content={() => componentRef.current}
+                      />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -150,8 +171,28 @@ const Tables = () => {
         tableName={name}
         id={id}
       />
+      <ComponentToPrint ref={componentRef} qr={qrCode} table={name} />
     </div>
   );
 };
+
+const ComponentToPrint = React.forwardRef((props, ref) => {
+  return (
+    <div className="hidden">
+      <div className="container printContainer" ref={ref}>
+        <h1 className="spacing">Evas Restaurant</h1>
+        <h2 className="spacing">{props.table}</h2>
+        {props.qr !== "" ? <QRCode value={props.qr} /> : <div></div>}
+
+        <p style={{ marginTop: "3rem" }}>WLAN-Name: EvasImbiss<br />Passwort: evas-imbiss</p>
+        <ol style={{ textAlign: "left", marginTop: "3rem" }}>
+          <li>QR-Code scannen</li>
+          <li>Essen bestellen</li>
+          <li>Genießen</li>
+        </ol>
+      </div>
+    </div>
+  );
+});
 
 export default Tables;

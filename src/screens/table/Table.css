@@ -29,3 +29,18 @@
 .text-field {
     color: #13aa52;
 }
+
+.hidden{
+    display: none; 
+}
+
+.printContainer {
+    text-align: center;
+    list-style-position: inside;
+    padding: 20em;
+}
+
+.spacing {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
