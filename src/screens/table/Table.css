@@ -1,0 +1,31 @@
+.table {
+    min-width: 650px;
+    margin-bottom: 0;
+}
+
+.tableIcon{
+    color: #00000080;
+    padding: 0;
+}
+.tableIcon:hover, .tableIcon:focus {
+    color: #13aa52;
+}
+.tableButton{
+    padding: 0!important;
+    margin-right: 10px!important;
+}
+.tableButton:active{
+    outline: none!important;
+}
+
+.tableToolbar{
+    padding: 0 12px !important;
+}
+
+.title {
+    flex: 1 1 100% !important;
+}
+
+.text-field {
+    color: #13aa52;
+}

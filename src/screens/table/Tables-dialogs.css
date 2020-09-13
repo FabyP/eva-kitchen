@@ -1,0 +1,26 @@
+.fileContainer .deleteImage {
+  background-color: #13aa52;
+}
+
+.primaryBtn {
+  color: #13aa52 !important;
+}
+.primaryBtn:hover {
+  background-color: #13aa520a !important;
+}
+
+.secondaryBtn {
+  color: #0000008a !important;
+}
+
+.secondaryBtn:hover {
+  background-color: #0000000a !important;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: #13aa52 !important;
+}
+
+.MuiInput-underline:after {
+  border-bottom: 2px solid #13aa52 !important;
+}
