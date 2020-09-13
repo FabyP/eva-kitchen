@@ -23,7 +23,7 @@ const Order = () => {
     <div className="container">
       {orders.map((order) => (
         <p key={order._id}>
-          Tisch: {order.TableId}, Customer: {order.CustomerId}
+          Tisch: {order.TableId}, Customer: {order.CustomerId} Items: {JSON.stringify(order.OrderItems)} 
         </p>
       ))}
     </div>
