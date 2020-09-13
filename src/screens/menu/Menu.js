@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import http from "../../http-common";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
+import AddIcon from "@material-ui/icons/Add";
+
+import "./Menu.css";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
 
   const fetchMenuItems = async () => {
-    await axios
-      .get("http://localhost:9000/menuitems")
+    await http
+      .get("/menuitems")
       .then(function (response) {
         setMenuItems(response.data);
       })
@@ -18,11 +34,80 @@ const Menu = () => {
   useEffect(() => {
     fetchMenuItems();
   }, []);
+
   return (
     <div className="container">
-      {menuItems.map((menuItem) => (
-        <p key={menuItem._id}>{menuItem.name}</p>
-      ))}
+      <Paper>
+        <Toolbar className="tableToolbar">
+          <Typography
+            className="title"
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Speisekarte
+          </Typography>
+          <Tooltip title="Gericht hinzufügen">
+            <IconButton
+              aria-label="Gericht hinzufügen"
+              className="tableButton"
+            >
+              <AddIcon className="tableIcon mx-auto" />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+        <TableContainer>
+          <Table className="table" aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Gericht</TableCell>
+                <TableCell>Beschreibung</TableCell>
+                <TableCell>Bild</TableCell>
+                <TableCell>Zutaten</TableCell>
+                <TableCell>Zusatzstoffe</TableCell>
+                <TableCell align="right">Aktionen</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {menuItems.map((menuItem) => (
+                <TableRow key={menuItem._id}>
+                  <TableCell component="th" scope="row">
+                    {menuItem.name}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {menuItem.description}
+                  </TableCell>
+                  <TableCell>
+                    <img
+                      src={menuItem.image}
+                      className="tableImage"
+                      alt={"Bild von Kategorie " + menuItem.name}
+                    />
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {menuItem.ingredients}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {menuItem.additive}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      className="tableButton"
+                    >
+                      <EditIcon className="tableIcon mx-auto" />
+                    </IconButton>
+                    <IconButton
+                      className="tableButton"
+                    >
+                      <DeleteIcon className="tableIcon mx-auto" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 };
