@@ -17,15 +17,12 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import DoneIcon from "@material-ui/icons/Done";
 import Checkbox from "@material-ui/core/Checkbox";
 
 import "./Order.css";
-import { purple } from "@material-ui/core/colors";
 
 const Row = (order) => {
   const [open, setOpen] = useState(true);
-  const [table, setTable] = useState({});
   const date = new Date(order.order.OrderTimeStamp);
 
   function total(items) {
@@ -36,9 +33,6 @@ const Row = (order) => {
 
     return sum.toFixed(2).toString();
   }
-
-  function changeIconColor() {}
-
   function setPayed(id) {
     http
       .patch("/order/" + id, { StatusPayed: true })
@@ -49,21 +43,6 @@ const Row = (order) => {
         console.log(error);
       });
   }
-
-  const fetchTable = async () => {
-    http
-      .get("/tables/" + order.order.TableId)
-      .then(function (response) {
-        setTable(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    fetchTable();
-  });
 
   return (
     <React.Fragment>
@@ -78,7 +57,7 @@ const Row = (order) => {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {table.TableName}
+          {order.order.TableName}
         </TableCell>
         <TableCell component="th" scope="row">
           {date.getHours()}:{date.getMinutes()}
@@ -115,12 +94,6 @@ const Row = (order) => {
                       <TableCell>{orderItem.qty}</TableCell>
                       <TableCell>{orderItem.menuitemprice}</TableCell>
                       <TableCell align="right">
-                        {/* <IconButton
-                          className="tableButton"
-                          onClick={() => changeIconColor()}
-                        >
-                          <DoneIcon className="tableIcon mx-auto" />
-                        </IconButton> */}
                         <Checkbox
                           inputProps={{ "aria-label": "OrderItem checkbox" }}
                         />
@@ -146,6 +119,7 @@ const Row = (order) => {
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
+  const [tables, setTables] = useState([]);
 
   const fetchOrders = async () => {
     await http
@@ -158,6 +132,26 @@ const Order = () => {
       });
   };
 
+  const fetchTables = async () => {
+    await http
+      .get("/tables")
+      .then(function (response) {
+        setTables(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const mergeById = (orders, tables) =>
+    orders.map((itm) => ({
+      ...tables.find((item) => item._id === itm.TableId && item),
+      ...itm,
+    }));
+
+  const mergedTables = mergeById(orders, tables);
+  
+
   useEffect(() => {
     const socket = socketIOClient("http://localhost:9000/");
     socket.on("event", function (data) {
@@ -166,6 +160,7 @@ const Order = () => {
       }
     });
     fetchOrders();
+    fetchTables();
   }, []);
 
   return (
@@ -192,7 +187,7 @@ const Order = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) =>
+              {mergedTables.map((order) =>
                 order.StatusPayed === false ? (
                   <Row key={order._id} order={order} />
                 ) : null
