@@ -157,11 +157,27 @@ const Order = () => {
     socket.on("event", function (data) {
       if (data.order === "updated") {
         fetchOrders();
+      } else if(data.table === "updated"){
+        fetchTables();
       }
     });
     fetchOrders();
     fetchTables();
   }, []);
+
+  const calledWaiter = async (tableId) => {
+    if(tableId !== null){
+      await http.patch('/table/' + tableId, {
+        waitressCalled: false,
+      })
+      .then(function (response) {
+
+      })
+      .catch(function (error) {
+          console.log(error);
+      });
+    }
+  }
 
   return (
     <div className="container">
@@ -176,6 +192,40 @@ const Order = () => {
             Bestellungen
           </Typography>
         </Toolbar>
+        <TableContainer>
+        <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Tischename</TableCell>
+                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="right">Erledigt</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tables.map((table) =>
+                  table.waitressCalled === true ? (
+                    <React.Fragment key={table._id}>
+                    <TableRow>
+                     <TableCell >
+                        {table.TableName}
+                      </TableCell>
+                      <TableCell align="center">
+                        Kellner gerufen
+                      </TableCell>
+                      <TableCell align="right">
+                        <Checkbox onChange={() => calledWaiter(table._id)}
+                          inputProps={{ "aria-label": "Waitress checkbox" }} 
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                    </TableRow>
+                  </React.Fragment>
+                  ) : null
+                )}
+              </TableBody>
+            </Table>
+        </TableContainer>
         <TableContainer>
           <Table aria-label="collapsible table">
             <TableHead>
