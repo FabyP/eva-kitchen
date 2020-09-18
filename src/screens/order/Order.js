@@ -80,6 +80,7 @@ const Row = (order) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Gericht</TableCell>
+                    <TableCell>Anmerkung</TableCell>
                     <TableCell>Anzahl</TableCell>
                     <TableCell>Preis (€)</TableCell>
                     <TableCell align="right">Status</TableCell>
@@ -91,6 +92,7 @@ const Row = (order) => {
                       <TableCell component="th" scope="row">
                         {orderItem.name}
                       </TableCell>
+                      <TableCell>TODO: Anmerkung muss noch aus Api kommen</TableCell>
                       <TableCell>{orderItem.qty}</TableCell>
                       <TableCell>{orderItem.menuitemprice}</TableCell>
                       <TableCell align="right">
@@ -100,8 +102,8 @@ const Row = (order) => {
                       </TableCell>
                     </TableRow>
                   ))}
-                  <TableRow>
-                    <TableCell rowSpan={3} />
+                  <TableRow rowSpan={4}>
+                    <TableCell colSpan={2}/>
                     <TableCell colSpan={2}>Gesamtpreis</TableCell>
                     <TableCell align="right">
                       {total(order.order.OrderItems)}€
