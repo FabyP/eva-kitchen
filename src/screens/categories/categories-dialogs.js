@@ -8,6 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import ImageUploader from "react-images-upload";
 import PropTypes from "prop-types";
+import InputLabel from '@material-ui/core/InputLabel';
 
 import http from "../../http-common";
 import "./categories-dialogs.css";
