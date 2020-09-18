@@ -18,6 +18,8 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import DoneIcon from "@material-ui/icons/Done";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import "./Order.css";
 
@@ -92,7 +94,9 @@ const Row = (order) => {
                       <TableCell component="th" scope="row">
                         {orderItem.name}
                       </TableCell>
-                      <TableCell>TODO: Anmerkung muss noch aus Api kommen</TableCell>
+                      <TableCell>
+                        TODO: Anmerkung muss noch aus Api kommen
+                      </TableCell>
                       <TableCell>{orderItem.qty}</TableCell>
                       <TableCell>{orderItem.menuitemprice}</TableCell>
                       <TableCell align="right">
@@ -103,7 +107,7 @@ const Row = (order) => {
                     </TableRow>
                   ))}
                   <TableRow rowSpan={4}>
-                    <TableCell colSpan={2}/>
+                    <TableCell colSpan={2} />
                     <TableCell colSpan={2}>Gesamtpreis</TableCell>
                     <TableCell align="right">
                       {total(order.order.OrderItems)}€
@@ -152,14 +156,13 @@ const Order = () => {
     }));
 
   const mergedTables = mergeById(orders, tables);
-  
 
   useEffect(() => {
     const socket = socketIOClient("http://localhost:9000/");
     socket.on("event", function (data) {
       if (data.order === "updated") {
         fetchOrders();
-      } else if(data.table === "updated"){
+      } else if (data.table === "updated") {
         fetchTables();
       }
     });
@@ -168,18 +171,17 @@ const Order = () => {
   }, []);
 
   const calledWaiter = async (tableId) => {
-    if(tableId !== null){
-      await http.patch('/table/' + tableId, {
-        waitressCalled: false,
-      })
-      .then(function (response) {
-
-      })
-      .catch(function (error) {
+    if (tableId !== null) {
+      await http
+        .patch("/table/" + tableId, {
+          waitressCalled: false,
+        })
+        .then(function (response) {})
+        .catch(function (error) {
           console.log(error);
-      });
+        });
     }
-  }
+  };
 
   return (
     <div className="container">
@@ -194,40 +196,22 @@ const Order = () => {
             Bestellungen
           </Typography>
         </Toolbar>
-        <TableContainer>
-        <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tischename</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell align="right">Erledigt</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tables.map((table) =>
-                  table.waitressCalled === true ? (
-                    <React.Fragment key={table._id}>
-                    <TableRow>
-                     <TableCell >
-                        {table.TableName}
-                      </TableCell>
-                      <TableCell align="center">
-                        Kellner gerufen
-                      </TableCell>
-                      <TableCell align="right">
-                        <Checkbox onChange={() => calledWaiter(table._id)}
-                          inputProps={{ "aria-label": "Waitress checkbox" }} 
-                        />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                    </TableRow>
-                  </React.Fragment>
-                  ) : null
-                )}
-              </TableBody>
-            </Table>
-        </TableContainer>
+        {tables.map((table) =>
+          table.waitressCalled ? (
+            <Typography key={table._id} className="waiterText">
+              Kellner an {table.TableName} gerufen.
+              <Tooltip title="Erledigt?">
+                <IconButton
+                  aria-label="setDone"
+                  className="waiterBtn"
+                  onClick={() => calledWaiter(table._id)}
+                >
+                  <DoneIcon />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+          ) : null
+        )}
         <TableContainer>
           <Table aria-label="collapsible table">
             <TableHead>
