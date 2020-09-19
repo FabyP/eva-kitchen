@@ -1,9 +1,21 @@
-.paidBtn{
-    color: white!important;
-    background-color: #13aa52!important;
+.paidBtn {
+  color: white !important;
+  background-color: #13aa52 !important;
 }
 
-
 .MuiCheckbox-colorSecondary.Mui-checked {
-    color: #13aa52!important;
+  color: #13aa52 !important;
+}
+
+.waiterText {
+  padding: 0 12px;
+}
+
+.waiterBtn {
+  color: #00000080;
+  padding: 0;
+}
+.waiterBtn:hover,
+.waiterBtn:focus {
+  color: #13aa52;
 }

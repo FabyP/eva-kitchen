@@ -16,9 +16,34 @@ import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 
 import "./Menu.css";
+import { DeleteDialog, AddDialog } from "./menu-dialogs";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+
+  function openDeleteDialog(id, name) {
+    setIsDeleteOpen(true);
+    setName(name);
+    setId(id);
+  }
+
+  function openAddDialog() {
+    setIsAddOpen(true);
+  }
+
+  const handleDeleteDialogClose = () => {
+    setIsDeleteOpen(false);
+  };
+
+  const handleAddDialogClose = () => {
+    setIsAddOpen(false);
+  };
+
+  
 
   const fetchMenuItems = async () => {
     await http
@@ -34,6 +59,8 @@ const Menu = () => {
   useEffect(() => {
     fetchMenuItems();
   }, []);
+
+
 
   return (
     <div className="container">
@@ -51,6 +78,7 @@ const Menu = () => {
             <IconButton
               aria-label="Gericht hinzufügen"
               className="tableButton"
+              onClick={openAddDialog}
             >
               <AddIcon className="tableIcon mx-auto" />
             </IconButton>
@@ -97,7 +125,10 @@ const Menu = () => {
                       <EditIcon className="tableIcon mx-auto" />
                     </IconButton>
                     <IconButton
-                      className="tableButton"
+                      className="tableButton" 
+                      onClick={() =>
+                        openDeleteDialog(menuItem._id, menuItem.name)
+                      }
                     >
                       <DeleteIcon className="tableIcon mx-auto" />
                     </IconButton>
@@ -108,6 +139,13 @@ const Menu = () => {
           </Table>
         </TableContainer>
       </Paper>
+      <DeleteDialog
+        isOpen={isDeleteOpen}
+        handleClose={handleDeleteDialogClose}
+        name={name}
+        id={id}
+      />
+      <AddDialog isOpen={isAddOpen} handleClose={handleAddDialogClose} />
     </div>
   );
 };
