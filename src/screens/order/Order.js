@@ -158,7 +158,7 @@ const Order = () => {
   const mergedTables = mergeById(orders, tables);
 
   useEffect(() => {
-    const socket = socketIOClient("http://localhost:9000/");
+    const socket = socketIOClient(process.env.REACT_APP_API_URL);
     socket.on("event", function (data) {
       if (data.order === "updated") {
         fetchOrders();
