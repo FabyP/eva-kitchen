@@ -95,7 +95,7 @@ const Row = (order) => {
                         {orderItem.name}
                       </TableCell>
                       <TableCell>
-                        TODO: Anmerkung muss noch aus Api kommen
+                      {orderItem.note}
                       </TableCell>
                       <TableCell>{orderItem.qty}</TableCell>
                       <TableCell>{orderItem.menuitemprice}</TableCell>
