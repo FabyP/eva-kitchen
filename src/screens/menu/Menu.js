@@ -16,12 +16,14 @@ import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 
 import "./Menu.css";
-import { DeleteDialog, AddDialog } from "./menu-dialogs";
+import { DeleteDialog, AddDialog, EditDialog } from "./menu-dialogs";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [menuitem, setMenuitem] = useState({});
   const [name, setName] = useState("");
   const [id, setId] = useState("");
 
@@ -43,7 +45,16 @@ const Menu = () => {
     setIsAddOpen(false);
   };
 
-  
+  function openEditDialog(menuItem) {
+    setIsEditOpen(true);
+    setMenuitem(menuItem);
+  }
+
+  function handleEditDialogClose() {
+    setIsEditOpen(false);
+  }
+
+
 
   const fetchMenuItems = async () => {
     await http
@@ -121,11 +132,12 @@ const Menu = () => {
                   <TableCell align="right">
                     <IconButton
                       className="tableButton"
+                      onClick={() => openEditDialog(menuItem)}
                     >
                       <EditIcon className="tableIcon mx-auto" />
                     </IconButton>
                     <IconButton
-                      className="tableButton" 
+                      className="tableButton"
                       onClick={() =>
                         openDeleteDialog(menuItem._id, menuItem.name)
                       }
@@ -146,6 +158,11 @@ const Menu = () => {
         id={id}
       />
       <AddDialog isOpen={isAddOpen} handleClose={handleAddDialogClose} />
+      <EditDialog
+        isOpen={isEditOpen}
+        handleClose={handleEditDialogClose}
+        menuitem={menuitem}
+      />
     </div>
   );
 };

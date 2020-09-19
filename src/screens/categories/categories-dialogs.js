@@ -61,7 +61,6 @@ DeleteDialog.propTypes = {
 
 export const AddDialog = ({ isOpen, id , handleClose }) => {
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
   const [picture, setPicture] = useState({});
 
   
@@ -116,14 +115,6 @@ export const AddDialog = ({ isOpen, id , handleClose }) => {
           fullWidth
           onChange={(e) => setName(e.target.value)}
         />
-        <TextField
-          margin="dense"
-          id="url"
-          label="Bild-Url"
-          type="text"
-          fullWidth
-          onChange={(e) => setImage(e.target.value)}
-        />
         <ImageUploader
           withIcon={true}
           buttonText="Upload"
@@ -150,4 +141,108 @@ export const AddDialog = ({ isOpen, id , handleClose }) => {
 AddDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
+};
+
+export const EditDialog = ({ isOpen, categoryitem, handleClose }) => {
+  const [name, setName] = useState(categoryitem.name);
+  const [picture, setPicture] = useState([]);
+  const [image, setImage] = useState(categoryitem.image);
+
+
+  const onDrop = (picture) => {
+    setPicture(picture[0]);
+  };
+
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+
+  async function handleConfirm (evt) {
+    evt.preventDefault();
+    var categoryitems = { 
+      name: name,
+    };
+    if(picture !== null && !Array.isArray(picture)) {
+      let imgData = await toBase64(picture);
+      categoryitems.imageData = imgData;
+    }
+    console.log("aaa", categoryitems);
+
+    // evt.preventDefault();
+    if (categoryitems !== "") {
+      http
+        .patch("/category/" + categoryitem._id, categoryitems)
+        .then(function () {
+          console.log("edited");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    handleClose();
+  }
+
+  return (
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{"Editieren"}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          "{categoryitem.name}" bearbeiten.
+        </DialogContentText>
+        <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Name"
+          type="text"
+          defaultValue={categoryitem.name}
+          fullWidth
+          onChange={(e) => setName(e.target.value)}
+        />
+        <ImageUploader
+          withIcon={true}
+          buttonText="Upload"
+          onChange={onDrop}
+          imgExtension={[".jpg", ".png"]}
+          maxFileSize={5242880}
+          singleImage={true}
+          withPreview={true}
+          buttonStyles={{ backgroundColor: "#13aa52" }}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={handleClose}
+          color="secondary"
+          className="secondaryBtn"
+        >
+          Abbrechen
+        </Button>
+        <Button
+          onClick={handleConfirm}
+          color="primary"
+          className="primaryBtn"
+          autoFocus
+        >
+          Speichern
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+EditDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  categoryitem: PropTypes.object.isRequired,
 };

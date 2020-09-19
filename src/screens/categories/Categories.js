@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 
-import { DeleteDialog, AddDialog } from "./categories-dialogs";
+import { DeleteDialog, AddDialog, EditDialog } from "./categories-dialogs";
 
 import http from "../../http-common";
 
@@ -24,6 +24,8 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [categoryitem, setCategoryItem] = useState({});
   const [newCatId, setNewCatId] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
@@ -47,6 +49,15 @@ const Categories = () => {
     setIsAddOpen(false);
   };
 
+  function openEditDialog(categoryitem) {
+    setIsEditOpen(true);
+    setCategoryItem(categoryitem);
+  }
+
+  function handleEditDialogClose() {
+    setIsEditOpen(false);
+  }
+
   const fetchCategories = async () => {
     await http
       .get("/categories")
@@ -62,9 +73,6 @@ const Categories = () => {
     fetchCategories();
   }, []);
 
-  function editCategory(id) {
-    console.log("Category with id=" + id + " was clicked.");
-  }
 
   return (
     <div className="container">
@@ -113,7 +121,7 @@ const Categories = () => {
                   <TableCell align="right">
                     <IconButton
                       className="tableButton"
-                      onClick={() => editCategory(category._id)}
+                      onClick={() => openEditDialog(category)}
                     >
                       <EditIcon className="tableIcon mx-auto" />
                     </IconButton>
@@ -139,7 +147,11 @@ const Categories = () => {
         id={id}
       />
       <AddDialog isOpen={isAddOpen} handleClose={handleAddDialogClose} />
-      
+      <EditDialog
+        isOpen={isEditOpen}
+        handleClose={handleEditDialogClose}
+        categoryitem={categoryitem}
+      />
 
       
     </div>
