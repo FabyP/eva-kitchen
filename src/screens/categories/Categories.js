@@ -24,6 +24,7 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [newCatId, setNewCatId] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
 

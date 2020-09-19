@@ -58,28 +58,35 @@ DeleteDialog.propTypes = {
   name: PropTypes.string,
 };
 
-export const AddDialog = ({ isOpen, handleClose }) => {
+export const AddDialog = ({ isOpen, id , handleClose }) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const [picture, setPicture] = useState([]);
+  const [picture, setPicture] = useState({});
 
-  function uploadImage() {
-    console.log(picture);
-  }
+  
 
   const onDrop = (picture) => {
-    setPicture([...picture, picture]);
+    setPicture(picture[0]);
   };
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    uploadImage();
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
-    const category = { name: name, image: image };
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
+    let imgBase64 = await toBase64(picture);
+    const category = { name: name, imageData: imgBase64 };
 
     http
-      .post("/category/", category)
-      .then(function () {
+      .post("/category/", category, /* {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    } */).then(function () {
         console.log("added");
       })
       .catch(function (error) {
